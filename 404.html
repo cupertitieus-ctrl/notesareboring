@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — NotesAreBoring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .error-page {
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; text-align: center; padding: 24px; position: relative;
+    }
+    .error-page::before {
+      content: ''; position: absolute; top: 30%; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%); pointer-events: none;
+    }
+    .error-code {
+      font-family: var(--font-mono); font-size: clamp(6rem, 20vw, 12rem); font-weight: 800;
+      line-height: 1; background: linear-gradient(135deg, var(--wrong), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 16px; cursor: pointer; transition: transform 0.2s ease;
+      user-select: none;
+    }
+    .error-code:hover { transform: scale(1.05) rotate(-2deg); }
+    .error-code:active { transform: scale(0.95) rotate(2deg); }
+    .error-content { position: relative; z-index: 1; }
+    .error-content h2 { font-size: 1.5rem; margin-bottom: 12px; }
+    .error-content p { color: var(--text-secondary); font-size: 1.05rem; max-width: 440px; margin: 0 auto 24px; }
+    .error-mascot {
+      font-size: 4rem; margin-bottom: 16px; display: inline-block;
+      animation: float 3s ease-in-out infinite; cursor: pointer;
+    }
+    .error-mascot:active { animation: spin-once 0.4s ease !important; }
+    @keyframes spin-once { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .error-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .excuse-box {
+      margin-top: 32px; padding: 20px; max-width: 400px; margin-left: auto; margin-right: auto;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .excuse-text {
+      font-family: var(--font-handwritten); font-size: 1.3rem; color: var(--text-secondary);
+      min-height: 40px; transition: opacity 0.3s ease;
+    }
+    /* Floating lost items */
+    .lost-item {
+      position: absolute; pointer-events: none; opacity: 0.06; font-size: 3rem;
+      animation: float 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="grain-overlay">
+
+  <!-- Floating lost items -->
+  <div class="lost-item" style="top: 10%; left: 8%; animation-delay: 0s;">📄</div>
+  <div class="lost-item" style="top: 20%; right: 12%; animation-delay: 0.5s;">❓</div>
+  <div class="lost-item" style="top: 50%; left: 5%; animation-delay: 1s;">🗺️</div>
+  <div class="lost-item" style="top: 70%; right: 8%; animation-delay: 1.5s;">🧭</div>
+  <div class="lost-item" style="bottom: 15%; left: 15%; animation-delay: 2s;">👻</div>
+
+  <div class="error-page">
+    <div class="error-content">
+      <div class="error-mascot" title="Click me! (I'm as lost as you are)">📝</div>
+      <div class="error-code" id="error-code" onclick="scramble404()">404</div>
+      <h2>This page doesn't exist.</h2>
+      <p>Kind of like your motivation to take notes.</p>
+      <p class="handwritten" style="color: var(--accent); font-size: 1.4rem; margin-bottom: 24px; transform: rotate(-1deg); display: inline-block;">
+        don't worry, even the best students get lost sometimes
+      </p>
+      <div class="error-actions">
+        <a href="index.html" class="btn btn-accent btn-lg party-btn jelly-hover">Go Home →</a>
+        <a href="play.html" class="btn btn-outline btn-lg jelly-hover">Join a Game</a>
+      </div>
+
+      <!-- Random excuse generator -->
+      <div class="excuse-box">
+        <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Official excuse for being here:</div>
+        <div class="excuse-text" id="excuse">"I was looking for the bathroom." 🚻</div>
+        <button class="btn btn-ghost btn-sm wiggle-hover" style="margin-top: 12px;" onclick="newExcuse()">
+          Generate New Excuse 🎲
+        </button>
+      </div>
+
+      <div style="margin-top: 32px;">
+        <div class="sticky-note" style="display: inline-block; transform: rotate(2deg);">
+          📌 If you're a student who somehow ended up here instead of studying... nice try. Go back and play the game. Your teacher is watching. 👀
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const excuses = [
+      '"I was looking for the bathroom." 🚻',
+      '"My dog ate the URL." 🐕',
+      '"I definitely typed the right address." 🤥',
+      '"The WiFi made me do it." 📡',
+      '"I was trying to find the extra credit page." 📝',
+      '"My cat walked across my keyboard." 🐱',
+      '"I\'m not lost, I\'m exploring." 🧭',
+      '"This is definitely where the cheat codes are." 🎮',
+      '"I was told there would be snacks here." 🍕',
+      '"I followed a link from a very suspicious email." 📧',
+      '"My GPS said turn left at the internet." 🗺️',
+      '"I blame autocorrect." ⌨️',
+      '"The homework ate my browser." 📚',
+      '"I\'m actually a time traveler and this page exists in the future." ⏰',
+      '"404 is my lucky number." 🍀',
+    ];
+
+    function newExcuse() {
+      const el = document.getElementById('excuse');
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.textContent = excuses[Math.floor(Math.random() * excuses.length)];
+        el.style.opacity = '1';
+      }, 300);
+    }
+
+    // Easter egg: clicking 404 scrambles it
+    function scramble404() {
+      const el = document.getElementById('error-code');
+      const variants = ['404', '4️⃣0️⃣4️⃣', 'oops', 'lol', '¯\\_(ツ)_/¯', 'bruh', '???', 'nope', '💀💀💀', '4oh4'];
+      el.textContent = variants[Math.floor(Math.random() * variants.length)];
+      setTimeout(() => { el.textContent = '404'; }, 1500);
+    }
+  </script>
+
+</body>
+</html>
